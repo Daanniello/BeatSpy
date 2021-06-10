@@ -1,0 +1,86 @@
+﻿<mah:MetroWindow
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" x:Class="BeatSpy.MainWindow"
+                 Title="BeatSpy"
+                 Height="670"
+                 Width="1200">
+    <Grid>
+        <mah:MetroTabControl x:Name="MetroTabControl" Margin="224,-39,0,0">
+            <TabItem Header="Configure Teams" Margin="-220,108,216,-107" Background="#FFF3F3F3">
+                <Grid Background="#FFE5E5E5">
+                    <TextBlock HorizontalAlignment="Left" Margin="78,24,0,0" Text="Teams" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="36"/>
+                    <Button x:Name="AddNewTeamButton" Content="Add new" HorizontalAlignment="Left" Margin="78,399,0,0" VerticalAlignment="Top" Width="370" Click="AddNewTeamButton_Click" Height="45"/>
+                    <Button x:Name="DeleteNewTeamButton" Content="Delete Selected" HorizontalAlignment="Left" Margin="78,455,0,0" VerticalAlignment="Top" Width="370" Click="DeleteNewTeamButton_Click" Height="43"/>
+                    <ListView x:Name="PlayersListView" IsEnabled="false" Margin="524,72,79,318">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <TextBlock HorizontalAlignment="Left" Margin="524,22,0,0" Text="Players" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="36"/>
+                    <Button x:Name="AddPlayerButton" Content="Add" IsEnabled="false" HorizontalAlignment="Left" Margin="524,399,0,0" VerticalAlignment="Top" Width="373" Click="AddPlayerButton_Click" Height="45"/>
+                    <Button x:Name="DeletePlayerButton" Content="Delete Selected" IsEnabled="false" HorizontalAlignment="Left" Margin="524,455,0,0" VerticalAlignment="Top" Width="373" Height="43"/>
+                    <TextBox x:Name="AddNewTeamTextBox" HorizontalAlignment="Left" Margin="78,346,0,0" Text="Team Name" TextWrapping="Wrap" VerticalAlignment="Top" Width="370" Height="41"/>
+                    <TextBox x:Name="AddPlayerTextBox" HorizontalAlignment="Left" IsEnabled="false" Margin="524,346,0,0" Text="Scoresaber ID" TextWrapping="Wrap" VerticalAlignment="Top" Width="373" Height="41"/>
+                    <ListBox x:Name="TeamsListBox" Margin="78,72,528,318" SelectionChanged="TeamsListBox_SelectionChanged"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Dashboard" Margin="-429,56,357,-55" Background="#FFF3F3F3">
+                <Grid Background="#FFE5E5E5">
+                    <TextBlock HorizontalAlignment="Left" Margin="26,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24"><Run Language="nl-nl" Text="Select Team"/></TextBlock>
+                    <TextBlock HorizontalAlignment="Left" Margin="231,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24"><Run Text="Select "/><Run Language="nl-nl" Text="Player"/></TextBlock>
+                    <ComboBox x:Name="TeamDropDown" HorizontalAlignment="Left" Margin="26,65,0,0" VerticalAlignment="Top" Width="174" Height="41" SelectionChanged="TeamDropDown_SelectionChanged"/>
+                    <ComboBox x:Name="PlayerDropDown" HorizontalAlignment="Left" Margin="231,65,0,0" VerticalAlignment="Top" Width="174" Height="41" SelectionChanged="PlayerDropDown_SelectionChanged"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="26,166,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24"><Run Language="nl-nl" Text="Team Skillsets"/></TextBlock>
+                    <TextBlock HorizontalAlignment="Left" Margin="537,166,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24"><Run Language="nl-nl" Text="Player"/><Run Text=" Skillsets"/></TextBlock>
+                    <mah:ProgressRing x:Name="playerSkillsetLoading" IsActive="false" Margin="695,334,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                    <Grid x:Name="playerSkillsetGrid" Visibility="Visible" Margin="507,252,10,10">
+                        <TextBlock x:Name="TechTextBlock" HorizontalAlignment="Left" Margin="187,110,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24"><Run Text="Tech"/><Run Language="nl-nl" Text="-placeholder"/></TextBlock>
+                        <TextBlock x:Name="AccTextBlock" HorizontalAlignment="Left" Margin="187,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24" Text="Acc-placeholder"/>
+                        <TextBlock x:Name="MidSpeedTextBlock" HorizontalAlignment="Left" Margin="187,228,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24" Text="Mid-Speed-placeholder"/>
+                        <TextBlock x:Name="HighSpeedTextBlock" HorizontalAlignment="Left" Margin="187,284,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24" Text="High-Speed-placeholder"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="32,110,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24"><Run Language="nl-nl" Text="Tech"/></TextBlock>
+                        <TextBlock HorizontalAlignment="Left" Margin="32,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24"><Run Language="nl-nl" Text="Acc"/></TextBlock>
+                        <TextBlock HorizontalAlignment="Left" Margin="32,228,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24"><Run Language="nl-nl" Text="Mid-Speed"/></TextBlock>
+                        <TextBlock HorizontalAlignment="Left" Margin="32,284,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24"><Run Language="nl-nl" Text="High-Speed"/></TextBlock>
+                        <TextBlock HorizontalAlignment="Left" Margin="32,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24"><Run Language="nl-nl" Text="Map Count"/></TextBlock>
+                        <TextBlock x:Name="TotalMapsUsed" HorizontalAlignment="Left" Margin="187,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24"><Run Language="nl-nl" Text="MapCount-placeholder"/></TextBlock>
+                        <TextBlock x:Name="TechOriginalPoints" HorizontalAlignment="Left" Margin="32,142,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Width="415" FontStyle="Italic" FontWeight="Light"><Run Text="total maps tech points"/><Run Language="nl-nl" Text=" (5)"/></TextBlock>
+                        <TextBlock x:Name="AccOriginalPoints" HorizontalAlignment="Left" Margin="32,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Width="415" FontStyle="Italic" FontWeight="Light"><Run Language="nl-nl" Text="total maps acc points (6)"/></TextBlock>
+                        <TextBlock x:Name="MidSpeedOriginalPoints" HorizontalAlignment="Left" Margin="32,260,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Width="415" FontStyle="Italic" FontWeight="Light"><Run Language="nl-nl" Text="total maps Mid-Speed points (12)"/></TextBlock>
+                        <TextBlock x:Name="HighSpeedOriginalPoints" HorizontalAlignment="Left" Margin="32,316,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Width="417" FontStyle="Italic" FontWeight="Light"><Run Language="nl-nl" Text="total maps High-Speed points (8)"/></TextBlock>
+
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Configure Maps" Margin="-570,159,557,-158" Background="#FFF3F3F3">
+                <Grid Background="#FFE5E5E5">
+                    <TextBox x:Name="MapKeyTextBox" HorizontalAlignment="Left" Margin="250,22,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="201"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="49,24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Width="293"><Run Text="Scoresaber Leaderboard ID"/><Run Language="nl-nl" Text=":"/></TextBlock>
+                    <Button x:Name="AddMapKeyButton" Content="Add map data" HorizontalAlignment="Left" Margin="456,22,0,0" VerticalAlignment="Top" Width="93" FontSize="8" Click="AddMapKeyButton_Click"/>
+                    <ListBox x:Name="MapKeyListBox" Margin="49,89,427,89"/>
+                    <mah:NumericUpDown x:Name="TechNumberInput" HorizontalAlignment="Left" Margin="796,89,0,0" VerticalAlignment="Top" Width="136"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="645,83,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24" Width="106"><Run Language="nl-nl" Text="TECH"/></TextBlock>
+                    <TextBlock HorizontalAlignment="Left" Margin="685,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Width="247"><Run Text="*"/><Run Text="Give a value"/><Run Language="nl-nl" Text=" between 1 &amp; 10"/></TextBlock>
+                    <mah:NumericUpDown x:Name="AccNumberInput" HorizontalAlignment="Left" Margin="796,140,0,0" VerticalAlignment="Top" Width="136"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="645,134,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24" Width="106"><Run Language="nl-nl" Text="ACC"/></TextBlock>
+                    <mah:NumericUpDown x:Name="MidSpeedNumberInput" HorizontalAlignment="Left" Margin="796,197,0,0" VerticalAlignment="Top" Width="136"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="645,191,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24" Width="129"><Run Language="nl-nl" Text="MID-SPEED"/></TextBlock>
+                    <mah:NumericUpDown x:Name="HighSpeedNumberInput" HorizontalAlignment="Left" Margin="796,254,0,0" VerticalAlignment="Top" Width="136"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="645,248,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24" Width="139"><Run Language="nl-nl" Text="HIGH-"/><Run Text="SPEED"/></TextBlock>
+                    <Button x:Name="SaveMapSkillsetButton" Content="Save" HorizontalAlignment="Left" Margin="839,307,0,0" VerticalAlignment="Top" Width="93" FontSize="8" Click="SaveMapSkillsetButton_Click"/>
+                    <Button x:Name="AddPredefinedMapsButton" Content="Add predefined top 20 maps" HorizontalAlignment="Left" Margin="49,593,0,0" VerticalAlignment="Top" Width="135" FontSize="8" Click="AddPredefinedMapsButton_Click"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="49,54,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24" Width="293"><Run Language="nl-nl" Text="Maps"/></TextBlock>
+                </Grid>
+            </TabItem>
+        </mah:MetroTabControl>
+        <TextBlock x:Name="ErrorMessage" TextAlignment="Center" HorizontalAlignment="Left" Margin="10,547,0,0" Text="TextBlock" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FFDA0000" FontSize="20" Width="209" Height="97" FlowDirection="LeftToRight" FontStyle="Italic" FontWeight="Heavy"/>
+
+
+        <!-- your content -->
+
+    </Grid>
+</mah:MetroWindow>

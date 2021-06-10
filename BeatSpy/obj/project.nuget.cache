@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "dgSpecHash": "ctdOKfch/K+bWunfQjxgi5W1HbOnW6m3lpuACNGDZ3kbQW9g8Ymbq2kqwJwkkyz6PvV+lTrf9n21ZdcWCLtRww==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\DaanS\\source\\repos\\BeatSpy\\BeatSpy\\BeatSpy.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\DaanS\\.nuget\\packages\\controlzex\\4.4.0\\controlzex.4.4.0.nupkg.sha512",
+    "C:\\Users\\DaanS\\.nuget\\packages\\mahapps.metro\\2.4.5\\mahapps.metro.2.4.5.nupkg.sha512",
+    "C:\\Users\\DaanS\\.nuget\\packages\\mahapps.metro.iconpacks\\4.8.0\\mahapps.metro.iconpacks.4.8.0.nupkg.sha512",
+    "C:\\Users\\DaanS\\.nuget\\packages\\mahapps.metro.resources\\0.6.1\\mahapps.metro.resources.0.6.1.nupkg.sha512",
+    "C:\\Users\\DaanS\\.nuget\\packages\\materialdesigncolors\\2.0.1\\materialdesigncolors.2.0.1.nupkg.sha512",
+    "C:\\Users\\DaanS\\.nuget\\packages\\materialdesignthemes\\4.1.0\\materialdesignthemes.4.1.0.nupkg.sha512",
+    "C:\\Users\\DaanS\\.nuget\\packages\\materialdesignthemes.mahapps\\0.1.7\\materialdesignthemes.mahapps.0.1.7.nupkg.sha512",
+    "C:\\Users\\DaanS\\.nuget\\packages\\microsoft.xaml.behaviors.wpf\\1.1.19\\microsoft.xaml.behaviors.wpf.1.1.19.nupkg.sha512",
+    "C:\\Users\\DaanS\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\DaanS\\.nuget\\packages\\scoresaberlib\\1.0.0\\scoresaberlib.1.0.0.nupkg.sha512",
+    "C:\\Users\\DaanS\\.nuget\\packages\\system.text.json\\4.7.2\\system.text.json.4.7.2.nupkg.sha512"
+  ],
+  "logs": []
+}
