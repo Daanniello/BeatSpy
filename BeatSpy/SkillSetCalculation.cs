@@ -13,9 +13,9 @@ namespace BeatSpy
         private string playerToCalculate;
         private List<string> mapInfoList = new List<string>();
 
-        public SkillSetCalculation(string player)
+        public SkillSetCalculation(string playerScoresaberID)
         {
-            playerToCalculate = player;
+            playerToCalculate = playerScoresaberID;
         }
 
         public void AddMaps(params string[] mapInfoParam)
@@ -28,21 +28,25 @@ namespace BeatSpy
             var scoresaberClient = new ScoreSaberClient();
 
             //Get the last 5 recentsongs pages 
-            List<Score> recentscores = new List<Score>();
+            var playerIdFixed = Convert.ToUInt64(playerToCalculate.Split("|")[1]);
+
+            List<Score> scores = new List<Score>();
             for (var x = 0; x < 10; x++)
-            {
-                var lastRecentMaps = await scoresaberClient.Api.Players.GetRecentSongs(Convert.ToUInt64(playerToCalculate.Split("|")[1]), 1);
-                foreach (var score in lastRecentMaps.Scores) recentscores.Add(score);
+            {                
+                var lastRecentMaps = await scoresaberClient.Api.Players.GetRecentSongs(playerIdFixed, 1);
+                if (lastRecentMaps == null) continue;
+                foreach (var score in lastRecentMaps.Scores) scores.Add(score);
             }
 
             for (var x = 0; x < 4; x++)
             {
-                var lastTopMaps = await scoresaberClient.Api.Players.GetTopSongs(Convert.ToUInt64(playerToCalculate.Split("|")[1]), 1);
-                foreach (var score in lastTopMaps.Scores) recentscores.Add(score);
+                var lastTopMaps = await scoresaberClient.Api.Players.GetTopSongs(playerIdFixed, 1);
+                if (lastTopMaps == null) continue;
+                foreach (var score in lastTopMaps.Scores) scores.Add(score);
             }
 
 
-            var playerData = await scoresaberClient.Api.Players.ByIDBasic(Convert.ToUInt64(playerToCalculate.Split("|")[1]));
+            var playerData = await scoresaberClient.Api.Players.ByIDBasic(playerIdFixed);            
             var playerRank = playerData.PlayerInfo.Rank;
 
             var skillSetData = new SkillSetData();
@@ -50,7 +54,7 @@ namespace BeatSpy
             //Get the map in the maplist 
             foreach (var map in mapInfoList)
             {
-                var actualMap = recentscores.Where(x => x.LeaderboardId.ToString() == map.Split("|")[0]);
+                var actualMap = scores.Where(x => x.LeaderboardId.ToString() == map.Split("|")[0]);
                 if (actualMap.Count() <= 0) continue;
 
                 skillSetData.TotalMapCountUsed += 1;
