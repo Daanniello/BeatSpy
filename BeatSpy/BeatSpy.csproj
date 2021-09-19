@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="mammoth.png" />
+    <None Remove="No.png" />
+    <None Remove="sleuth-or-spy-emoji-by-twitter.png" />
+    <None Remove="yeet.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ChartDirector.Net" Version="7.0.0" />
     <PackageReference Include="MahApps.Metro" Version="2.4.5" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.8.0" />
     <PackageReference Include="MahApps.Metro.Resources" Version="0.6.1" />
@@ -19,6 +27,13 @@
   <ItemGroup>
     <Folder Include="Save\" />
     <Folder Include="Templates\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="mammoth.png" />
+    <Resource Include="No.png" />
+    <Resource Include="sleuth-or-spy-emoji-by-twitter.png" />
+    <Resource Include="yeet.png" />
   </ItemGroup>
 
 </Project>
