@@ -7,62 +7,56 @@ namespace BeatSpy.API.BeatSaver.Models
 {
     public partial class BeatSaverMapInfoModel
     {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("uploader")]
+        public Uploader Uploader { get; set; }
+
         [JsonProperty("metadata")]
         public Metadata Metadata { get; set; }
 
         [JsonProperty("stats")]
         public Stats Stats { get; set; }
 
-        [JsonProperty("description")]
-        public string Description { get; set; }
-
-        [JsonProperty("deletedAt")]
-        public object DeletedAt { get; set; }
-
-        [JsonProperty("_id")]
-        public string Id { get; set; }
-
-        [JsonProperty("key")]
-        public string Key { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("uploader")]
-        public Uploader Uploader { get; set; }
-
-        [JsonProperty("hash")]
-        public string Hash { get; set; }
-
         [JsonProperty("uploaded")]
         public DateTimeOffset Uploaded { get; set; }
 
-        [JsonProperty("directDownload")]
-        public string DirectDownload { get; set; }
+        [JsonProperty("automapper")]
+        public bool Automapper { get; set; }
 
-        [JsonProperty("downloadURL")]
-        public string DownloadUrl { get; set; }
+        [JsonProperty("ranked")]
+        public bool Ranked { get; set; }
 
-        [JsonProperty("coverURL")]
-        public string CoverUrl { get; set; }
+        [JsonProperty("qualified")]
+        public bool Qualified { get; set; }
+
+        [JsonProperty("versions")]
+        public List<Version> Versions { get; set; }
+
+        [JsonProperty("createdAt")]
+        public DateTimeOffset CreatedAt { get; set; }
+
+        [JsonProperty("updatedAt")]
+        public DateTimeOffset UpdatedAt { get; set; }
+
+        [JsonProperty("lastPublishedAt")]
+        public DateTimeOffset LastPublishedAt { get; set; }
     }
 
     public partial class Metadata
     {
-        [JsonProperty("difficulties")]
-        public MetadataDifficulties Difficulties { get; set; }
+        [JsonProperty("bpm")]
+        public long Bpm { get; set; }
 
         [JsonProperty("duration")]
         public long Duration { get; set; }
-
-        [JsonProperty("characteristics")]
-        public Characteristic[] Characteristics { get; set; }
-
-        [JsonProperty("levelAuthorName")]
-        public string LevelAuthorName { get; set; }
-
-        [JsonProperty("songAuthorName")]
-        public string SongAuthorName { get; set; }
 
         [JsonProperty("songName")]
         public string SongName { get; set; }
@@ -70,106 +64,141 @@ namespace BeatSpy.API.BeatSaver.Models
         [JsonProperty("songSubName")]
         public string SongSubName { get; set; }
 
-        [JsonProperty("bpm")]
-        public long Bpm { get; set; }
-    }
+        [JsonProperty("songAuthorName")]
+        public string SongAuthorName { get; set; }
 
-    public partial class Characteristic
-    {
-        [JsonProperty("difficulties")]
-        public CharacteristicDifficulties Difficulties { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
-    }
-
-    public partial class CharacteristicDifficulties
-    {
-        [JsonProperty("easy")]
-        public object Easy { get; set; }
-
-        [JsonProperty("expert")]
-        public object Expert { get; set; }
-
-        [JsonProperty("expertPlus")]
-        public ExpertPlus ExpertPlus { get; set; }
-
-        [JsonProperty("hard")]
-        public object Hard { get; set; }
-
-        [JsonProperty("normal")]
-        public object Normal { get; set; }
-    }
-
-    public partial class ExpertPlus
-    {
-        [JsonProperty("duration")]
-        public long Duration { get; set; }
-
-        [JsonProperty("length")]
-        public long Length { get; set; }
-
-        [JsonProperty("njs")]
-        public long Njs { get; set; }
-
-        [JsonProperty("njsOffset")]
-        public long NjsOffset { get; set; }
-
-        [JsonProperty("bombs")]
-        public long Bombs { get; set; }
-
-        [JsonProperty("notes")]
-        public long Notes { get; set; }
-
-        [JsonProperty("obstacles")]
-        public long Obstacles { get; set; }
-    }
-
-    public partial class MetadataDifficulties
-    {
-        [JsonProperty("easy")]
-        public bool Easy { get; set; }
-
-        [JsonProperty("expert")]
-        public bool Expert { get; set; }
-
-        [JsonProperty("expertPlus")]
-        public bool ExpertPlus { get; set; }
-
-        [JsonProperty("hard")]
-        public bool Hard { get; set; }
-
-        [JsonProperty("normal")]
-        public bool Normal { get; set; }
+        [JsonProperty("levelAuthorName")]
+        public string LevelAuthorName { get; set; }
     }
 
     public partial class Stats
     {
-        [JsonProperty("downloads")]
-        public long Downloads { get; set; }
-
         [JsonProperty("plays")]
         public long Plays { get; set; }
 
-        [JsonProperty("downVotes")]
-        public long DownVotes { get; set; }
+        [JsonProperty("downloads")]
+        public long Downloads { get; set; }
 
-        [JsonProperty("upVotes")]
-        public long UpVotes { get; set; }
+        [JsonProperty("upvotes")]
+        public long Upvotes { get; set; }
 
-        [JsonProperty("heat")]
-        public double Heat { get; set; }
+        [JsonProperty("downvotes")]
+        public long Downvotes { get; set; }
 
-        [JsonProperty("rating")]
-        public double Rating { get; set; }
+        [JsonProperty("score")]
+        public double Score { get; set; }
     }
 
     public partial class Uploader
     {
-        [JsonProperty("_id")]
-        public string Id { get; set; }
+        [JsonProperty("id")]
+        public long Id { get; set; }
 
-        [JsonProperty("username")]
-        public string Username { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("avatar")]
+        public Uri Avatar { get; set; }
+
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        [JsonProperty("curator")]
+        public bool Curator { get; set; }
     }
+
+    public partial class Version
+    {
+        [JsonProperty("hash")]
+        public string Hash { get; set; }
+
+        [JsonProperty("state")]
+        public string State { get; set; }
+
+        [JsonProperty("createdAt")]
+        public DateTimeOffset CreatedAt { get; set; }
+
+        [JsonProperty("sageScore")]
+        public long SageScore { get; set; }
+
+        [JsonProperty("diffs")]
+        public List<Diff> Diffs { get; set; }
+
+        [JsonProperty("downloadURL")]
+        public Uri DownloadUrl { get; set; }
+
+        [JsonProperty("coverURL")]
+        public Uri CoverUrl { get; set; }
+
+        [JsonProperty("previewURL")]
+        public Uri PreviewUrl { get; set; }
+    }
+
+    public partial class Diff
+    {
+        [JsonProperty("njs")]
+        public long Njs { get; set; }
+
+        [JsonProperty("offset")]
+        public long Offset { get; set; }
+
+        [JsonProperty("notes")]
+        public long Notes { get; set; }
+
+        [JsonProperty("bombs")]
+        public long Bombs { get; set; }
+
+        [JsonProperty("obstacles")]
+        public long Obstacles { get; set; }
+
+        [JsonProperty("nps")]
+        public double Nps { get; set; }
+
+        [JsonProperty("length")]
+        public long Length { get; set; }
+
+        [JsonProperty("characteristic")]
+        public string Characteristic { get; set; }
+
+        [JsonProperty("difficulty")]
+        public string Difficulty { get; set; }
+
+        [JsonProperty("events")]
+        public long Events { get; set; }
+
+        [JsonProperty("chroma")]
+        public bool Chroma { get; set; }
+
+        [JsonProperty("me")]
+        public bool Me { get; set; }
+
+        [JsonProperty("ne")]
+        public bool Ne { get; set; }
+
+        [JsonProperty("cinema")]
+        public bool Cinema { get; set; }
+
+        [JsonProperty("seconds")]
+        public double Seconds { get; set; }
+
+        [JsonProperty("paritySummary")]
+        public ParitySummary ParitySummary { get; set; }
+
+        [JsonProperty("maxScore")]
+        public long MaxScore { get; set; }
+    }
+
+    public partial class ParitySummary
+    {
+        [JsonProperty("errors")]
+        public long Errors { get; set; }
+
+        [JsonProperty("warns")]
+        public long Warns { get; set; }
+
+        [JsonProperty("resets")]
+        public long Resets { get; set; }
+    }
+
+
 }

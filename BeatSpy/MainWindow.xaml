@@ -22,7 +22,7 @@
                     </ListView>
                     <TextBlock HorizontalAlignment="Left" Margin="494,22,0,0" Text="Players" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="36" Width="124" Foreground="#FFEDEDED"/>
                     <Button x:Name="AddPlayerButton" Content="Add" IsEnabled="false" HorizontalAlignment="Left" Margin="494,514,0,0" VerticalAlignment="Top" Width="472" Click="AddPlayerButton_Click" Height="46" BorderBrush="#FF444444"/>
-                    <Button x:Name="DeletePlayerButton" Content="Delete Selected" IsEnabled="false" HorizontalAlignment="Left" Margin="494,570,0,0" VerticalAlignment="Top" Width="472" Height="44" BorderBrush="#FF444444"/>
+                    <Button x:Name="DeletePlayerButton" Content="Delete Selected" IsEnabled="false" HorizontalAlignment="Left" Margin="494,570,0,0" VerticalAlignment="Top" Width="472" Height="44" BorderBrush="#FF444444" Click="DeletePlayerButton_Click"/>
                     <TextBox x:Name="AddNewTeamTextBox" HorizontalAlignment="Left" Margin="10,461,0,0" Text="Team Name" TextWrapping="Wrap" VerticalAlignment="Top" Width="471" Height="41" BorderBrush="#FF444444"/>
                     <TextBox x:Name="AddPlayerTextBox" HorizontalAlignment="Left" IsEnabled="false" Margin="494,461,0,0" Text="Scoresaber ID" TextWrapping="Wrap" VerticalAlignment="Top" Width="472" Height="41" BorderBrush="#FF444444"/>
                     <ListBox x:Name="TeamsListBox" Margin="10,72,495,207" SelectionChanged="TeamsListBox_SelectionChanged"/>

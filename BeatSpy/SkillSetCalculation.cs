@@ -37,72 +37,65 @@ namespace BeatSpy
         {
             var scoresaberClient = new ScoreSaberClient();
 
-            //Get the last 5 recentsongs pages 
-            var playerIdFixed = Convert.ToUInt64(playerToCalculate.Split("|")[playerToCalculate.Split("|").Length - 2]);
+            //Get recentsongs pages 
+            var playerIdFixed = Convert.ToInt64(playerToCalculate.Split("|")[playerToCalculate.Split("|").Length - 2]);
 
-            List<Score> scores = new List<Score>();
-            for (var x = 1; x <= 10; x++)
+            List<PlayerScoresModel.PlayerScore> scores = new List<PlayerScoresModel.PlayerScore>();
+
+            var lastRecentMaps = await scoresaberClient.Api.Players.GetPlayerScores(playerIdFixed, 100, Players.sort.recent);
+            if (lastRecentMaps == null)
             {
-                var lastRecentMaps = await scoresaberClient.Api.Players.GetRecentSongs(playerIdFixed, x);
+                await Task.Delay(5000);
+                lastRecentMaps = await scoresaberClient.Api.Players.GetPlayerScores(playerIdFixed, 100, Players.sort.recent);
                 if (lastRecentMaps == null)
                 {
-                    await Task.Delay(5000);
-                    lastRecentMaps = await scoresaberClient.Api.Players.GetRecentSongs(playerIdFixed, x);
-                    if (lastRecentMaps == null)
-                    {
-                        if (window != null) window.ShowErrorMessage($"Could not get recentsongs page {x} from {playerIdFixed}");
-                        continue;
-                    }
+                    if (window != null) window.ShowErrorMessage($"Could not get recentsongs page from {playerIdFixed}");
                 }
-                foreach (var score in lastRecentMaps.Scores) scores.Add(score);
             }
+            foreach (var score in lastRecentMaps) scores.Add(score);
 
-            for (var x = 1; x <= 4; x++)
+
+
+            var lastTopMaps = await scoresaberClient.Api.Players.GetPlayerScores(playerIdFixed, 100, Players.sort.top);
+            if (lastTopMaps == null)
             {
-                var lastTopMaps = await scoresaberClient.Api.Players.GetTopSongs(playerIdFixed, x);
+                await Task.Delay(5000);
+                lastTopMaps = await scoresaberClient.Api.Players.GetPlayerScores(playerIdFixed, 100, Players.sort.top);
                 if (lastTopMaps == null)
                 {
-                    await Task.Delay(5000);
-                    lastTopMaps = await scoresaberClient.Api.Players.GetTopSongs(playerIdFixed, x);
-                    if (lastTopMaps == null)
-                    {
-                        if (window != null) window.ShowErrorMessage($"Could not get topsongs page {x} from {playerIdFixed}");
-                        continue;
-                    }
+                    if (window != null) window.ShowErrorMessage($"Could not get topsongs page from {playerIdFixed}");
                 }
-                foreach (var score in lastTopMaps.Scores) scores.Add(score);
             }
+            foreach (var score in lastTopMaps) scores.Add(score);
 
 
-            var playerData = await scoresaberClient.Api.Players.ByIDBasic(playerIdFixed);
+
+            var playerData = await scoresaberClient.Api.Players.GetPlayer(playerIdFixed);
             if (playerData == null) return null;
-            var playerRank = playerData.PlayerInfo.Rank;
+            var playerRank = playerData.Rank;
 
             var skillSetData = new SkillSetData();
-            skillSetData.PlayerName = playerData.PlayerInfo.PlayerName;
+            skillSetData.PlayerName = playerData.Name;
 
             var playerMapsScores = new List<PlayerMapScores>();
 
             //Get the map in the maplist 
             foreach (var map in mapDataList)
             {
-                var actualMap = scores.Where(x => x.SongHash.ToString().ToUpper() == map.HashCode.ToUpper() && x.DifficultyRaw.Replace("_", "").Replace("SoloStandard", "").Trim() == map.Difficulty);
-                if (actualMap.Count() <= 0) continue;
+                var actualMap = scores.FirstOrDefault(x => x.Leaderboard.SongHash.ToString().ToUpper() == map.HashCode.ToUpper() && x.Leaderboard.Difficulty.DifficultyRaw.ToLower().Contains(map.Difficulty.ToLower()));
+                if (actualMap == null) continue;
 
-                var beatSaverInfo = await BeatSaverApi.GetMapByHash(actualMap.First().SongHash.ToString());
-                var metadataDynamic = beatSaverInfo.Metadata.Characteristics.First(x => x.Name == "Standard").Difficulties;
-                var diff = actualMap.First().DifficultyRaw.Replace("SoloStandard", "").Replace("_", "").Trim();
-                dynamic difficulty = metadataDynamic.GetType().GetProperty(diff).GetValue(metadataDynamic, null);
-                var noteCount = (diff == "ExpertPlus" ? metadataDynamic.ExpertPlus.Notes : difficulty.notes);
-                var maxScore = (Convert.ToInt32(noteCount) - 13) * 920 + 4715;
+                var beatSaverInfo = await BeatSaverApi.GetMapByHash(actualMap.Leaderboard.SongHash.ToString());
+
+                var maxScore = beatSaverInfo.Versions.First().Diffs.FirstOrDefault(x => x.Difficulty.ToLower() == map.Difficulty.ToLower()).MaxScore;
                 if (maxScore < 0) maxScore = 0;
 
-                double percentage = (Convert.ToDouble(actualMap.First().UnmodififiedScore) / maxScore) * 100;
+                double percentage = (Convert.ToDouble(actualMap.Score.BaseScore) / maxScore) * 100;
 
                 playerMapsScores.Add(new PlayerMapScores()
                 {
-                    SongName = actualMap.First().SongName,
-                    Rank = $"#{actualMap.First().Rank}",
+                    SongName = actualMap.Leaderboard.SongName,
+                    Rank = $"#{actualMap.Score.Rank}",
                     Acc = $"{ Math.Round(percentage, 2)}%"
                 });
 
@@ -119,7 +112,7 @@ namespace BeatSpy
                 skillSetData.TotalOriginalMidSpeedPoints += midSpeedPoints;
                 skillSetData.TotalOriginalHighSpeedPoints += highSpeedPoints;
 
-                var rankOnMap = actualMap.First().Rank;
+                var rankOnMap = actualMap.Score.Rank;
 
                 var rankDifference = playerRank - rankOnMap;
 

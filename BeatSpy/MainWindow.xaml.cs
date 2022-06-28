@@ -49,6 +49,7 @@ namespace BeatSpy
         private void DeleteNewTeamButton_Click(object sender, RoutedEventArgs e)
         {
             TeamsListBox.Items.Remove(TeamsListBox.SelectedItem);
+            TeamsListBox.Items.Refresh();
         }
 
         private void TeamsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -74,17 +75,17 @@ namespace BeatSpy
 
             //Get player data from scoresaber
             var scoresaberClient = new ScoreSaberClient();
-            var playerInfo = await scoresaberClient.Api.Players.ByIDFull(Convert.ToUInt64(playerScoresaberID));
+            var playerInfo = await scoresaberClient.Api.Players.GetPlayer(Convert.ToInt64(playerScoresaberID));
             if (playerInfo == null)
             {
                 ErrorMessage.Text = "Could not find a player with this ID";
                 return;
             }
             //Add user to the playerview 
-            PlayersListView.Items.Add($"{playerInfo.PlayerInfo.PlayerName} ({playerInfo.PlayerInfo.PlayerId})");
+            PlayersListView.Items.Add($"{playerInfo.Name} ({playerInfo.Id})");
             //Add data to a local storage
 
-            SaveDataToJson($"{playerInfo.PlayerInfo.PlayerName}|{playerInfo.PlayerInfo.PlayerId}|{TeamsListBox.SelectedItem}", "Save\\Players.json");
+            SaveDataToJson($"{playerInfo.Name}|{playerInfo.Id}|{TeamsListBox.SelectedItem}", "Save\\Players.json");
             UpdateTeamAndPlayersListBoxes();
         }
 
@@ -117,8 +118,14 @@ namespace BeatSpy
                 if (!TeamsListBox.Items.Contains(line.Split("|")[2])) TeamsListBox.Items.Add(line.Split("|")[2]);
 
             }
+        }
 
-
+        private void DeletePlayerButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedPlayer = PlayersListView.SelectedItem;
+            RemoveDataFromJson(selectedPlayer.ToString(), "Save\\Players.json");
+            PlayersListView.Items.Remove(PlayersListView.SelectedItem);
+            PlayersListView.Items.Refresh();
         }
 
         #endregion PlayersList
@@ -159,23 +166,22 @@ namespace BeatSpy
                 return;
             }
 
-            var metadataDynamic = mapInfo.Metadata.Characteristics.First(x => x.Name == "Standard").Difficulties;
-            dynamic mapMetadata = metadataDynamic.GetType().GetProperty(difficulty.Content).GetValue(metadataDynamic, null);
+            var mapDiffData = mapInfo.Versions.First().Diffs.First(x => x.Difficulty == difficulty.Content);
 
             var mapData = new MapData()
             {
                 Name = mapInfo.Name,
-                HashCode = mapInfo.Hash,
+                HashCode = mapInfo.Versions.First().Hash,
                 Difficulty = difficulty.Content,
                 TechPoints = 0,
                 AccPoints = 0,
                 MidSpeedPoints = 0,
                 HighSpeedPoints = 0,
-                ImageUrl = mapInfo.CoverUrl,
-                Rating = mapInfo.Stats.Rating,
+                ImageUrl = $"https://eu.cdn.beatsaver.com/{mapInfo.Versions.First().Hash}.jpg",
+                Rating = mapInfo.Stats.Score,
                 Bpm = mapInfo.Metadata.Bpm,
-                Njs = difficulty.Content == "ExpertPlus" ? mapMetadata.Njs : mapMetadata.njs,
-                Nps = difficulty.Content == "ExpertPlus" ? mapMetadata.Notes / mapInfo.Metadata.Duration : mapMetadata.notes / mapInfo.Metadata.Duration,
+                Njs = mapDiffData.Njs,
+                Nps = mapDiffData.Notes / mapInfo.Metadata.Duration,
                 Duration = mapInfo.Metadata.Duration
             };
 
@@ -241,7 +247,7 @@ namespace BeatSpy
             var mapDataList = DeSerializeAndGetMapData();
             var selectedMapData = (MapData)MapDataGrid.SelectedItem;
             var mapData = mapDataList.First(x => x.HashCode == selectedMapData.HashCode);
-            mapData.TechPoints = (double) TechNumberInput.Value;
+            mapData.TechPoints = (double)TechNumberInput.Value;
             mapData.AccPoints = (double)AccNumberInput.Value;
             mapData.MidSpeedPoints = (double)MidSpeedNumberInput.Value;
             mapData.HighSpeedPoints = (double)HighSpeedNumberInput.Value;
@@ -257,7 +263,7 @@ namespace BeatSpy
             foreach (var selectedItem in mapDataArray)
             {
                 RemoveMapData((MapData)selectedItem);
-            }            
+            }
 
             //var mapData = GetDataFromJson("Save\\MapKeys.json");
             //var line = mapData.Where(x => x == MapKeyListBox.SelectedItem.ToString()).First();
@@ -367,13 +373,13 @@ namespace BeatSpy
 
             foreach (var mapData in mapDataList)
             {
-                if (mapData.TechPoints == 0 && mapData.AccPoints == 0 && mapData.MidSpeedPoints == 0 && mapData.HighSpeedPoints== 0)
+                if (mapData.TechPoints == 0 && mapData.AccPoints == 0 && mapData.MidSpeedPoints == 0 && mapData.HighSpeedPoints == 0)
                 {
                     ShowErrorMessage("Not all maps have skills added to them! Add them before doing the teams calculation.");
                     return;
                 }
             }
-            if(TeamDropDown.SelectedItem == null)
+            if (TeamDropDown.SelectedItem == null)
             {
                 ShowErrorMessage("You have not selected a team in the dropdown list");
                 return;
@@ -422,7 +428,7 @@ namespace BeatSpy
         private async void CalculatePlayerInfoButton_Click(object sender, RoutedEventArgs e)
         {
 
-            
+
 
 
             var mapDataList = DeSerializeAndGetMapData();
@@ -436,7 +442,7 @@ namespace BeatSpy
                 }
             }
 
-            if(PlayerDropDown.SelectedItem == null)
+            if (PlayerDropDown.SelectedItem == null)
             {
                 ShowErrorMessage("You have not selected a player in the drop down menu.");
                 return;
@@ -511,7 +517,7 @@ namespace BeatSpy
                 ErrorMessage.Visibility = Visibility.Visible;
                 await Task.Delay(5000);
                 ErrorMessage.Visibility = Visibility.Hidden;
-            });            
+            });
         }
 
         private void MapDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -529,17 +535,17 @@ namespace BeatSpy
 
                 MapUrlTextBlock.Text = selectedMapData.Name;
                 MapRatioTextBlock.Text = (Math.Round(selectedMapData.Rating, 2) * 100).ToString() + "% Upvotes";
-                MapBpm.Text = $"BPM: {Math.Round(selectedMapData.Bpm,2)}";
-                MapNJS.Text = $"NJS: {Math.Round(selectedMapData.Njs,2)}";
+                MapBpm.Text = $"BPM: {Math.Round(selectedMapData.Bpm, 2)}";
+                MapNJS.Text = $"NJS: {Math.Round(selectedMapData.Njs, 2)}";
                 MapNPS.Text = $"NPS: {Math.Round(selectedMapData.Nps, 2)}";
                 MapDuration.Text = $"Duration: {Math.Round(selectedMapData.Duration, 2)}";
 
-                mapImage.Source = new BitmapImage(new Uri("https://beatsaver.com" + selectedMapData.ImageUrl));
+                mapImage.Source = new BitmapImage(new Uri(selectedMapData.ImageUrl));
             }
             catch
             {
                 return;
-            }            
+            }
         }
     }
 }

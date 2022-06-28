@@ -21,7 +21,7 @@
     <PackageReference Include="MaterialDesignColors" Version="2.0.1" />
     <PackageReference Include="MaterialDesignThemes" Version="4.1.0" />
     <PackageReference Include="MaterialDesignThemes.MahApps" Version="0.1.7" />
-    <PackageReference Include="ScoreSaberLib" Version="1.0.0" />
+    <PackageReference Include="ScoreSaberLib" Version="2.2.6" />
   </ItemGroup>
 
   <ItemGroup>

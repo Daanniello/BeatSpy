@@ -22,7 +22,7 @@ namespace BeatSpy.API.BeatSaver
 
         public static async Task<BeatSaverMapInfoModel> GetMapByHash(string hash)
         {
-            var mapJsonDataBeatSaver = await Get($"maps/by-hash/{hash}");
+            var mapJsonDataBeatSaver = await Get($"maps/hash/{hash}");
             if (mapJsonDataBeatSaver == null) return null;
             var mapInfoBeatSaver = JsonConvert.DeserializeObject<BeatSaverMapInfoModel>(mapJsonDataBeatSaver);
             return mapInfoBeatSaver;
@@ -30,7 +30,7 @@ namespace BeatSpy.API.BeatSaver
 
         public static async Task<BeatSaverMapInfoModel> GetMapByKey(string key)
         {
-            var mapJsonDataBeatSaver = await Get($"maps/detail/{key}");
+            var mapJsonDataBeatSaver = await Get($"maps/id/{key}");
             if (mapJsonDataBeatSaver == null) return null;
             var mapInfoBeatSaver = JsonConvert.DeserializeObject<BeatSaverMapInfoModel>(mapJsonDataBeatSaver);
             return mapInfoBeatSaver;
